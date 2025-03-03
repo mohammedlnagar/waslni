@@ -1,0 +1,25 @@
+<!-- Modal for Updating Contact Details -->
+<div class="modal fade" id="editContactModal" tabindex="-1" aria-labelledby="editContactModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editContactModalLabel">Edit Contact Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editContactForm">
+                    <input type="hidden" id="editContactId" name="contact_id">
+                    <div class="mb-3">
+                        <label for="editContactName" class="form-label">Contact Name</label>
+                        <input type="text" id="editContactName" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editContactPhone" class="form-label">Phone Number</label>
+                        <input type="text" id="editContactPhone" class="form-control" required pattern="[0-9]{10,15}">
+                    </div>
+                    <button type="submit" class="btn btn-success">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
