@@ -15,6 +15,8 @@ import os
 from django.contrib.messages import constants as messages
 import django_heroku
 from decouple import config
+import dj_database_url
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,7 +30,7 @@ AUTH_USER_MODEL = 'account.CustomUser'
 SECRET_KEY = 'django-insecure-0(uoo3c2!e!s6j76z0el51r#(9y)b46_(2h$py(r6nzx!420@x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -65,7 +67,8 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware', 'whitenoise.middleware.WhiteNoiseMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware', 
+        'whitenoise.middleware.WhiteNoiseMiddleware',  # <-- Add this line
 ]
 
 
@@ -94,15 +97,37 @@ WSGI_APPLICATION = 'wasel.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'wasel',
-        'USER': 'postgres',
-        'PASSWORD': 'Sezar8760',
-        'HOST': 'localhost'
+# Database Configuration
+# DATABASES = {
+#     'default': dj_database_url.config(default='postgres://user:password@localhost:5432/dbname', conn_max_age=600)
+# }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'wasel',
+#         'USER': 'postgres',
+#         'PASSWORD': 'Sezar8760',
+#         'HOST': 'localhost'
+#     }
+# }
+
+if 'DATABASE_URL' in os.environ:
+    DATABASES = {
+        'default': dj_database_url.config(conn_max_age=600)
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'your_local_db_name',
+            'USER': 'your_local_db_user',
+            'PASSWORD': 'your_local_db_password',
+            'HOST': 'localhost',
+            'PORT': '5432',
+        }
+    }
+
 
 
 # Password validation
