@@ -41,9 +41,9 @@ def manage_appointments_and_messages(request):
 
         # Handle message template creation
         elif form_type == "message_template":
-            form = MessageTemplateForm(request.POST)
-            if form.is_valid():
-                form.save()
+            messageform = MessageTemplateForm(request.POST)
+            if messageform.is_valid():
+                messageform.save()
                 messages.success(request, "Message template created successfully!")
 
                 return JsonResponse({"success": True, "message": "Message template created successfully!"})

@@ -93,7 +93,6 @@
             <div class="modal-body">
                 <form id="messageTemplateForm" method="POST" action="{% url 'manage_appointments' %}">
                     {% csrf_token %}
-
                     <div class="mb-3">
                         <label for="{{ message_template_form.category.id_for_label }}" class="form-label">Message
                             Category</label>
