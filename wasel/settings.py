@@ -32,7 +32,7 @@ SECRET_KEY = "django-insecure-0(uoo3c2!e!s6j76z0el51r#(9y)b46_(2h$py(r6nzx!420@x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['https://waslni-6a05ea35e8ab.herokuapp.com','127.0.0.1']
 
 MESSAGE_TAGS = {
     messages.DEBUG: "secondary",
@@ -68,7 +68,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",  # <-- Add this line
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # Add this line
 ]
 
 
@@ -112,7 +112,15 @@ WSGI_APPLICATION = "wasel.wsgi.application"
 # }
 
 if "DATABASE_URL" in os.environ:
-    DATABASES = {"default": dj_database_url.config(conn_max_age=600)}
+    # When deployed to Heroku, override with DATABASE_URL from environment variables
+    DATABASES = {"default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "wasel",
+            "USER": "postgres",
+            "PASSWORD": "Sezar8760",
+            "HOST": "localhost",
+        }}
+    DATABASES["default"] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 else:
     DATABASES = {
         "default": {
@@ -162,7 +170,7 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "wasel/static")]
 
