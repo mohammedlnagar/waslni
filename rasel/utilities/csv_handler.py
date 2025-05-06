@@ -18,8 +18,10 @@ DATE_COLUMNS = ['Appointment Date', 'Appointment Date/Time', 'Cancelled Date/Tim
 def clean_csv_data(file):
     """Reads and cleans the CSV file data, ensuring proper formatting."""
     try:
-        df = pd.read_csv(file, skiprows=2, parse_dates=DATE_COLUMNS)
-        
+        # df = pd.read_csv(file, skiprows=2, parse_dates=DATE_COLUMNS)
+        df = pd.read_csv(file, skiprows=2)
+        df['Appointment Date'] = pd.to_datetime(df['Appointment Date'], dayfirst=True)
+        df['Appointment Date/Time'] = pd.to_datetime(df['Appointment Date/Time'], dayfirst=True, format= '%d-%m-%Y %H:%M')
         # Ensure the required columns are present
         missing_cols = [col for col in CSV_COLUMNS if col not in df.columns]
         if missing_cols:
@@ -47,7 +49,8 @@ def save_appointments_from_csv(user, file, list_title, messages):
     """
     try:
         df = clean_csv_data(file)
-
+        only_scheduled = df['Appointment Status'] != "Cancelled"
+        df = df[only_scheduled]
         # Create new AppointmentsList
         appointments_list = AppointmentsList.objects.create(
             title=list_title,
@@ -77,7 +80,7 @@ def save_appointments_from_csv(user, file, list_title, messages):
                 contact=contact,
                 appointments_list=appointments_list,
                 doctor_name=row['Consultant'],
-                appointment_date=row['Appointment Date/Time'].date() if pd.notna(row['Appointment Date/Time']) else None,
+                appointment_date=row['Appointment Date'].date() if pd.notna(row['Appointment Date/Time']) else None,
                 appointment_time=row['Appointment Date/Time'].time() if pd.notna(row['Appointment Date/Time']) else None,
                 appointment_status=row['Appointment Status']
             )
